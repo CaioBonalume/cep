@@ -31,7 +31,6 @@ class EnderecoModel {
   EnderecoModel(this.objectId, this.rua, this.cidade, this.estado, this.cep,
       this.createdAt, this.updatedAt);
 
-  EnderecoModel.get();
   EnderecoModel.post(this.rua, this.cidade, this.estado, this.cep);
 
   EnderecoModel.fromJson(Map<String, dynamic> json) {

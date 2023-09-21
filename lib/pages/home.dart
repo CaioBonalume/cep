@@ -16,7 +16,6 @@ class _HomePageState extends State<HomePage> {
   var viaCepModel = ViaCepModel();
   var viaCepRepo = ViaCepRepo();
   var enderecoRepo = EnderecosBack4AppRepo();
-  var enderecoModel = EnderecoModel.get();
 
   var controllerCep = TextEditingController(text: '');
 
@@ -54,8 +53,8 @@ class _HomePageState extends State<HomePage> {
                           });
                           viaCepModel = await viaCepRepo.consultarCEP(cep);
                           if (viaCepModel.ddd != null) {
-                            print('Este é o cep: ${enderecoRepo.get(cep)}');
-                            if (enderecoModel.cep != cep) {
+                            // print('Este é o cep: ${enderecoRepo.get(cep)}');
+                            if (0 != cep) {
                               await enderecoRepo.post(EnderecoModel.post(
                                   viaCepModel.logradouro ?? '',
                                   viaCepModel.localidade ?? '',

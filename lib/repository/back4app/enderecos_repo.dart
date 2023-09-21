@@ -6,7 +6,7 @@ class EnderecosBack4AppRepo {
 
   EnderecosBack4AppRepo();
 
-  Future<EnderecosModel> get(String cep) async {
+  Future<EnderecosModel> get() async {
     var url = '/enderecos';
     var response = await _customDio.dio.get(url);
     return EnderecosModel.fromJson(response.data);
