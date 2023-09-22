@@ -49,6 +49,10 @@ class _CepsCadastradosState extends State<CepsCadastrados> {
                 itemCount: _enderecosRepo.enderecos.length,
                 itemBuilder: (BuildContext bc, int index) {
                   var endereco = _enderecosRepo.enderecos[index];
+                  return Card(
+                    key: Key(endereco.objectId),
+                    child: Text(endereco.cep),
+                  );
                 }))
       ]),
     ));
