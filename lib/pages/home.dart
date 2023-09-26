@@ -13,13 +13,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int index = 0;
   var viaCepModel = ViaCepModel();
   var viaCepRepo = ViaCepRepo();
-  var enderecoRepo = EnderecosBack4AppRepo();
+  EnderecosBack4AppRepo enderecosRepo = EnderecosBack4AppRepo();
+  var _enderecosRepo = EnderecosModel([]);
 
   var controllerCep = TextEditingController(text: '');
 
   bool loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    get();
+  }
+
+  void get() async {
+    _enderecosRepo = await enderecosRepo.get();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,15 +66,46 @@ class _HomePageState extends State<HomePage> {
                           });
                           viaCepModel = await viaCepRepo.consultarCEP(cep);
                           if (viaCepModel.ddd != null) {
-                            // print('Este é o cep: ${enderecoRepo.get(cep)}');
-                            if (0 != cep) {
-                              await enderecoRepo.post(EnderecoModel.post(
-                                  viaCepModel.logradouro ?? '',
-                                  viaCepModel.localidade ?? '',
-                                  viaCepModel.uf ?? '',
-                                  cep));
-                            } else {
-                              print('Endereço já cadastrado!');
+                            try {
+                              bool existe = _enderecosRepo.enderecos
+                                  .any((endereco) => endereco.cep == cep);
+                              if (!existe) {
+                                await enderecosRepo.post(EnderecoModel.post(
+                                    viaCepModel.logradouro ?? '',
+                                    viaCepModel.localidade ?? '',
+                                    viaCepModel.uf ?? '',
+                                    cep));
+                                const Card(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 15),
+                                    child: Text(
+                                      'Não encontrado.\nPortanto acaba de ser adicionado ao Banco de Dados',
+                                      style: TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                print('Endereço já cadastrado!');
+                                const Card(
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 15),
+                                    child: Text(
+                                      'Presente no Banco de Dados',
+                                      style: TextStyle(
+                                          color: Colors.green,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
+                                    ),
+                                  ),
+                                );
+                              }
+                            } catch (e) {
+                              print('Deu certo não');
                             }
                           } else {
                             print('CEP não encontrado');
@@ -85,30 +129,6 @@ class _HomePageState extends State<HomePage> {
                 Visibility(
                     visible: loading, child: const CircularProgressIndicator())
               ],
-            ),
-          ),
-          Card(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-              child: Text(
-                'Presente no Banco de Dados',
-                style: TextStyle(
-                    color: Colors.green,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
-              ),
-            ),
-          ),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-              child: Text(
-                'Não encontrado.\nPortanto acaba de ser adicionado ao Banco de Dados',
-                style: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
-              ),
             ),
           ),
           TextButton(

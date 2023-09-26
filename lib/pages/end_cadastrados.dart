@@ -34,16 +34,10 @@ class _CepsCadastradosState extends State<CepsCadastrados> {
       ),
       body: Column(children: [
         const Text(
-          'Veja dos os Registros Pesquisados',
+          'Veja dos os Registros Presentes\nNo banco de Dados',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
-        TextButton(
-            onPressed: () async {
-              var endereco = EnderecosBack4AppRepo();
-              var enderecos = await endereco.get();
-              print(enderecos);
-            },
-            child: const Text('Teste')),
+        const SizedBox(height: 30),
         Expanded(
             child: ListView.builder(
                 itemCount: _enderecosRepo.enderecos.length,
